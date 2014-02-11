@@ -1,0 +1,8 @@
+bin/
+gen/
+
+*.iml
+*.ipr
+*.iws
+.idea/
+local.properties
