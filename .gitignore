@@ -1,5 +1,7 @@
 bin/
 gen/
+out/
+target
 
 *.iml
 *.ipr
