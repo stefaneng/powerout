@@ -1,6 +1,10 @@
 language: java
+
 jdk: oraclejdk7
-install: ant debug
+
+install: true
+
+script: ant debug
 
 cache:
   - apt
