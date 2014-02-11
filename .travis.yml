@@ -1,6 +1,6 @@
 language: java
 jdk: oraclejdk7
-install: ant debug install
+install: ant debug
 
 notifications:
   email: false
