@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.Toast;
 import com.power.out.R;
 
@@ -69,6 +70,9 @@ public class MainActivity extends Activity {
                 // Retrieve the phone number from the NUMBER column
                 int column = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
                 String number = cursor.getString(column);
+
+                //ListView contactList = (ListView) findViewById(R.id.contactView);
+
 
                 Log.i(TAG, "Phone number: " + number.toString());
                 // Do something with the phone number...
