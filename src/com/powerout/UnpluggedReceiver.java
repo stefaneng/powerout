@@ -20,11 +20,15 @@ package com.powerout;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.telephony.SmsManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 public class UnpluggedReceiver extends BroadcastReceiver {
 
@@ -32,13 +36,22 @@ public class UnpluggedReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Toast.makeText(context, "Power disconnected.", Toast.LENGTH_LONG).show();
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss MM/dd/yyyy");
         String currentTimeStamp = dateFormat.format(new Date());
 
         String message = "Power out at: " + currentTimeStamp;
 
 
         SmsManager smsManager = SmsManager.getDefault();
-        smsManager.sendTextMessage("NUMBER", null, message, null, null);
+
+        SharedPreferences prefs = PreferenceManager
+            .getDefaultSharedPreferences(context);
+
+        Map<String,?> keys = prefs.getAll();
+
+        for(Map.Entry<String,?> entry : keys.entrySet()){
+            Log.i("Blah", entry.getValue().toString());
+            smsManager.sendTextMessage(entry.getValue().toString(), null, message, null, null);
+        }
     }
 }

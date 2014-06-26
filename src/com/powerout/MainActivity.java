@@ -21,10 +21,13 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.content.SharedPreferences.Editor;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
@@ -41,6 +44,22 @@ public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        PackageManager pm = getPackageManager();
+        ComponentName pluggedReceiver = new ComponentName(getApplicationContext(), PluggedReceiver.class);
+        ComponentName unpluggedReceiver = new ComponentName(getApplication(), UnpluggedReceiver.class);
+        pm.setComponentEnabledSetting(
+                pluggedReceiver,
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP
+        );
+
+        pm.setComponentEnabledSetting(
+                unpluggedReceiver,
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP
+        );
+
     }
 
     public void pickContact(View view) {
@@ -71,13 +90,20 @@ public class MainActivity extends Activity {
                 cursor.moveToFirst();
 
                 // Retrieve the phone number from the NUMBER column
-                int column = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
-                String number = cursor.getString(column);
+                int numberColumn = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+                String number = cursor.getString(numberColumn);
+
+                SharedPreferences sharedPreferences = PreferenceManager
+                        .getDefaultSharedPreferences(this);
+
+                Editor editor = sharedPreferences.edit();
+                editor.putString(number, number);
+                editor.commit();
 
                 //ListView contactList = (ListView) findViewById(R.id.contactView);
 
 
-                Log.i(TAG, "Phone number: " + number.toString());
+                Log.i(TAG, "Phone number: " + String.valueOf(number));
                 // Do something with the phone number...
             }
         }
@@ -125,5 +151,14 @@ public class MainActivity extends Activity {
         Button stopButton = (Button) findViewById(R.id.stopReceivers);
         stopButton.setEnabled(true);
         startButton.setEnabled(false);
+    }
+
+    public void clearNumbers(View view) {
+        SharedPreferences sharedPreferences = PreferenceManager
+                .getDefaultSharedPreferences(this);
+
+        Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.commit();
     }
 }

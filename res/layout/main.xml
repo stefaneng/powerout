@@ -52,6 +52,14 @@
             android:enabled="false"
             android:onClick="startReceivers"
             />
+    <Button
+            android:id="@+id/clearNumbers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clear Numbers"
+            android:layout_gravity="center"
+            android:onClick="clearNumbers"
+            />
     <ListView
         android:id="@+id/contactView"
         android:layout_width="wrap_content"
