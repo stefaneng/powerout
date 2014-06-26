@@ -31,14 +31,19 @@ import android.content.SharedPreferences.Editor;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.*;
 import com.power.out.R;
+
+import java.util.ArrayList;
+import java.util.Map;
 
 public class MainActivity extends Activity {
     static final String TAG = "com.powerout.MainActivity";
     static final int PICK_CONTACT_REQUEST = 1;
+
+    private ArrayList<String> listItems;
+    private ListView myListView;
+    private ArrayAdapter<String> adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,6 +64,21 @@ public class MainActivity extends Activity {
                 PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                 PackageManager.DONT_KILL_APP
         );
+
+        myListView = (ListView) findViewById(R.id.contactView);
+        listItems =  new ArrayList<String>();
+
+        SharedPreferences prefs = PreferenceManager
+                .getDefaultSharedPreferences(this);
+
+
+        Map<String,?> keys = prefs.getAll();
+        for(Map.Entry<String,?> entry : keys.entrySet()){
+            listItems.add(entry.getKey().toString());
+        }
+
+        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, listItems);
+        myListView.setAdapter(adapter);
 
     }
 
@@ -93,12 +113,21 @@ public class MainActivity extends Activity {
                 int numberColumn = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
                 String number = cursor.getString(numberColumn);
 
+                int nameColumn = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
+                String name = cursor.getString(nameColumn);
+
                 SharedPreferences sharedPreferences = PreferenceManager
                         .getDefaultSharedPreferences(this);
 
                 Editor editor = sharedPreferences.edit();
-                editor.putString(number, number);
+                editor.putString(name, number);
                 editor.commit();
+
+
+                if(! listItems.contains(name)) {
+                    listItems.add(name);
+                    adapter.notifyDataSetChanged();
+                }
 
                 //ListView contactList = (ListView) findViewById(R.id.contactView);
 
@@ -157,6 +186,8 @@ public class MainActivity extends Activity {
         SharedPreferences sharedPreferences = PreferenceManager
                 .getDefaultSharedPreferences(this);
 
+        listItems.clear();
+        adapter.notifyDataSetChanged();
         Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.commit();
