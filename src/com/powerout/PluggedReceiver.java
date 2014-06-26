@@ -20,12 +20,24 @@ package com.powerout;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.telephony.SmsManager;
 import android.widget.Toast;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class PluggedReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Toast.makeText(context, "Power Lost.", Toast.LENGTH_LONG).show();
+        Toast.makeText(context, "Power Back.", Toast.LENGTH_LONG).show();
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
+        String currentTimeStamp = dateFormat.format(new Date());
+
+        String message = "Power back at: " + currentTimeStamp;
+
+        SmsManager smsManager = SmsManager.getDefault();
+        smsManager.sendTextMessage("Phone Number", null, message, null, null);
     }
 }
