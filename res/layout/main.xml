@@ -35,6 +35,23 @@
             android:text="Add Contact"
             android:onClick="pickContact"
             />
+    <Button
+            android:id="@+id/stopReceivers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Stop Alerts"
+            android:layout_gravity="center"
+            android:onClick="stopReceivers"
+            />
+    <Button
+            android:id="@+id/startReceivers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Resume Alerts"
+            android:layout_gravity="center"
+            android:enabled="false"
+            android:onClick="startReceivers"
+            />
     <ListView
         android:id="@+id/contactView"
         android:layout_width="wrap_content"

@@ -39,6 +39,6 @@ public class UnpluggedReceiver extends BroadcastReceiver {
 
 
         SmsManager smsManager = SmsManager.getDefault();
-        smsManager.sendTextMessage("Phone Number", null, message, null, null);
+        smsManager.sendTextMessage("NUMBER", null, message, null, null);
     }
 }

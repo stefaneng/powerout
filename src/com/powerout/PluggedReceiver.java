@@ -38,6 +38,6 @@ public class PluggedReceiver extends BroadcastReceiver {
         String message = "Power back at: " + currentTimeStamp;
 
         SmsManager smsManager = SmsManager.getDefault();
-        smsManager.sendTextMessage("Phone Number", null, message, null, null);
+        smsManager.sendTextMessage("NUMBER", null, message, null, null);
     }
 }

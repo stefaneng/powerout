@@ -18,14 +18,17 @@
 package com.powerout;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 import com.power.out.R;
@@ -80,4 +83,47 @@ public class MainActivity extends Activity {
         }
     }
 
+    public void stopReceivers(View view) {
+        PackageManager pm = getPackageManager();
+        ComponentName pluggedReceiver = new ComponentName(getApplicationContext(), PluggedReceiver.class);
+        ComponentName unpluggedReceiver = new ComponentName(getApplication(), UnpluggedReceiver.class);
+        pm.setComponentEnabledSetting(
+                pluggedReceiver,
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP
+        );
+
+        pm.setComponentEnabledSetting(
+                unpluggedReceiver,
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP
+        );
+
+        Button startButton = (Button) findViewById(R.id.startReceivers);
+        Button stopButton = (Button) findViewById(R.id.stopReceivers);
+        startButton.setEnabled(true);
+        stopButton.setEnabled(false);
+    }
+
+    public void startReceivers(View view) {
+        PackageManager pm = getPackageManager();
+        ComponentName pluggedReceiver = new ComponentName(getApplicationContext(), PluggedReceiver.class);
+        ComponentName unpluggedReceiver = new ComponentName(getApplication(), UnpluggedReceiver.class);
+        pm.setComponentEnabledSetting(
+                pluggedReceiver,
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP
+        );
+
+        pm.setComponentEnabledSetting(
+                unpluggedReceiver,
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP
+        );
+
+        Button startButton = (Button) findViewById(R.id.startReceivers);
+        Button stopButton = (Button) findViewById(R.id.stopReceivers);
+        stopButton.setEnabled(true);
+        startButton.setEnabled(false);
+    }
 }
